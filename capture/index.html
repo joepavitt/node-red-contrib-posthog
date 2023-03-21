@@ -1,0 +1,64 @@
+<script type="text/javascript">
+    RED.nodes.registerType('posthog-capture',{
+        category: 'posthog',
+        paletteLabel: 'Capture',
+        color: '#eeefe8',
+        defaults: {
+            name: {value: ""},
+            project: { value: "", type: "posthog-project" },
+            event: { value: "" },
+            eventType: { value: "str" },
+            properties: { value: "" },
+            propertiesType: { value: "str" },
+        },
+        inputs:1,
+        icon: "posthog.svg",
+        oneditprepare: function () {
+
+            $("#node-input-event").typedInput({
+                default: "str",
+                types: ["msg", "str"],
+                typeField: "#node-input-eventType"
+            });
+
+            $("#node-input-properties").typedInput({
+                default: "json",
+                types: ["msg", "json"],
+                typeField: "#node-input-propertiesType"
+            });
+            
+        },
+        label: function() {
+            if (this.eventType === "str" && this.event) {
+                return this.name || `Capture '${this.event}'`
+            } else {
+                return this.name || "Capture";
+            }
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="posthog-capture">
+    <div class="form-row">
+        <label for="node-input-project"><i class="fa fa-tag"></i> Project</label>
+        <input type="text" id="node-input-project">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-event"><i class="fa fa-tag"></i> Event</label>
+        <input type="text" id="node-input-event" placeholder="event">
+        <input type="hidden" id="node-input-eventType" placeholder="event">
+    </div>
+    <div class="form-row">
+        <label for="node-input-properties"><i class="fa fa-tag"></i> Properties</label>
+        <input type="text" id="node-input-properties" placeholder="payload">
+        <input type="hidden" id="node-input-propertiesType" placeholder="payload">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="posthog-capture">
+    <p>A simple node that converts the message payloads into all lower-case characters</p>
+</script>
