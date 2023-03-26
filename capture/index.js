@@ -26,16 +26,22 @@ module.exports = function(RED) {
 
         node.on('input', async function (msg, send, done) {
 
+            console.log(config.props, config.propertiesType)
+
             const evt = RED.util.evaluateNodeProperty(config.event, config.eventType, node, msg)
             const props = RED.util.evaluateNodeProperty(config.properties, config.propertiesType, node, msg)
+            var timestamp = RED.util.evaluateNodeProperty(config.timestamp, config.timestampType, node, msg)
 
-            console.log(props)
+            if (!timestamp) {
+                timestamp = (new Date()).toISOString()
+            }
 
             await node.project.client.capture({
                 distinctId: 'Node-RED',
                 event: evt,
                 $lib: 'Node-RED',
-                properties: props
+                properties: props,
+                timestamp: timestamp
             })
 
             done()

@@ -6,33 +6,49 @@
         defaults: {
             name: {value: ""},
             project: { value: "", type: "posthog-project" },
-            event: { value: "" },
-            eventType: { value: "str" },
-            properties: { value: "" },
-            propertiesType: { value: "str" },
+            distinctId: { value: "" },
+            distinctIdType: { value: "none" },
+            timestamp: { value: "timestamp", required: false },
+            timestampType: { value: "msg" },
+            event: { value: "topic" },
+            eventType: { value: "msg" },
+            properties: { value: "payload" },
+            propertiesType: { value: "msg" },
         },
         inputs:1,
         icon: "posthog.svg",
         oneditprepare: function () {
 
+            $("#node-input-distinctId").typedInput({
+                default: "none",
+                types: [{value: 'none', label: 'none', hasValue: false}, "msg", "str"],
+                typeField: "#node-input-distinctIdType"
+            });
+            
             $("#node-input-event").typedInput({
-                default: "str",
+                default: "msg",
                 types: ["msg", "str"],
                 typeField: "#node-input-eventType"
             });
+            
+            $("#node-input-timestamp").typedInput({
+                default: "msg",
+                types: ["msg"],
+                typeField: "#node-input-timestampType"
+            });
 
             $("#node-input-properties").typedInput({
-                default: "json",
+                default: "msg",
                 types: ["msg", "json"],
                 typeField: "#node-input-propertiesType"
             });
-            
+
         },
         label: function() {
             if (this.eventType === "str" && this.event) {
-                return this.name || `Capture '${this.event}'`
+                return this.name || `capture('${this.event}')`
             } else {
-                return this.name || "Capture";
+                return this.name || "capture";
             }
         }
     });
@@ -44,8 +60,14 @@
         <input type="text" id="node-input-project">
     </div>
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <label for="node-input-distinctId"><i class="fa fa-tag"></i> Distinct ID</label>
+        <input type="text" id="node-input-distinctId">
+        <input type="hidden" id="node-input-distinctIdType">
+    </div>
+    <div class="form-row">
+        <label for="node-input-timestamp"><i class="fa fa-tag"></i> Timestamp</label>
+        <input type="text" id="node-input-timestamp">
+        <input type="hidden" id="node-input-timestampType" placeholder="timestamp">
     </div>
     <div class="form-row">
         <label for="node-input-event"><i class="fa fa-tag"></i> Event</label>
@@ -57,8 +79,32 @@
         <input type="text" id="node-input-properties" placeholder="payload">
         <input type="hidden" id="node-input-propertiesType" placeholder="payload">
     </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
 </script>
 
 <script type="text/html" data-help-name="posthog-capture">
-    <p>A simple node that converts the message payloads into all lower-case characters</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>project <span class="property-type">PostHog Project</span></dt>
+        <dd> the payload of the message to publish. </dd>
+        <dt>event <span class="property-type">msg | string</span></dt>
+        <dd> the MQTT topic to publish to.</dd>
+        <dt>properties <span class="property-type">msg | json</span></dt>
+        <dd> the MQTT topic to publish to.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p><code>msg.payload</code> is used as the payload of the published message.
+    If it contains an Object it will be converted to a JSON string before being sent.
+    If it contains a binary Buffer the message will be published as-is.</p>
+    <p>The topic used can be configured in the node or, if left blank, can be set
+    by <code>msg.topic</code>.</p>
+    <p>Likewise the QoS and retain values can be configured in the node or, if left
+    blank, set by <code>msg.qos</code> and <code>msg.retain</code> respectively.</p>
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://posthog.com/docs/libraries/node#capture">PostHog NodeJS SDK Docs</a> - Details on the <code>posthog.capture</code> call running under the covers</li>
+    </ul>
 </script>
