@@ -6,6 +6,10 @@
     "name": "Joe Pavitt",
     "url": "https://github.com/joepavitt"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joepavitt/node-red-contrib-posthog.git"
+  },
   "license": "Apache-2.0",
   "keywords": [
     "node-red"
