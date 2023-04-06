@@ -29,8 +29,6 @@ module.exports = function(RED) {
             const distinctId = RED.util.evaluateNodeProperty(config.distinctId, config.distinctIdType, node, msg)
             const props = RED.util.evaluateNodeProperty(config.properties, config.propertiesType, node, msg)
 
-            console.log(props)
-
             await node.project.client.groupIdentify({
                 groupType: config.groupType,
                 groupKey: distinctId,

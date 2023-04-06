@@ -63,23 +63,23 @@
 <script type="text/html" data-help-name="posthog-group">
     <h3>Inputs</h3>
     <dl class="message-properties">
-        <dt>project <span class="property-type">PostHog Project</span></dt>
-        <dd> the payload of the message to publish. </dd>
-        <dt>event <span class="property-type">msg | string</span></dt>
-        <dd> the MQTT topic to publish to.</dd>
-        <dt>properties <span class="property-type">msg | json</span></dt>
-        <dd> the MQTT topic to publish to.</dd>
+        <dt>Project <span class="property-type">PostHog Project</span></dt>
+        <dd> Dropdown selection for which PostHog project you wish to send events to.
+            Can be configured with a Project API key and PostHog host URL. </dd>
+        <dt>Group Type <span class="property-type">string</span></dt>
+        <dd> The PostHog group type, often something like 'organization', 'team',
+            or however you''ve chosen to use PostHog groups.</dd>
+        <dt>Distinct ID <span class="property-type">msg | string</span></dt>
+        <dd> Unique identifier for the group, as per PostHog's reocmmendations,
+            this should not be a "name", but unique identifier that will not change.</dd>
+        <dt>Properties <span class="property-type">msg | json</span></dt>
+        <dd> An object containing key/value pairs that will be assigned a properties
+            to this captured event.</dd>
     </dl>
     <h3>Details</h3>
-    <p><code>msg.payload</code> is used as the payload of the published message.
-    If it contains an Object it will be converted to a JSON string before being sent.
-    If it contains a binary Buffer the message will be published as-is.</p>
-    <p>The topic used can be configured in the node or, if left blank, can be set
-    by <code>msg.topic</code>.</p>
-    <p>Likewise the QoS and retain values can be configured in the node or, if left
-    blank, set by <code>msg.qos</code> and <code>msg.retain</code> respectively.</p>
+    <p>A wrapper for PostHog's NodeJS <a href="https://posthog.com/docs/libraries/node#group-analytics">groupIdentify</a> function</p>
     <h3>References</h3>
     <ul>
-        <li><a href="https://posthog.com/docs/libraries/node#group">PostHog NodeJS SDK Docs</a> - Details on the <code>posthog.capture</code> call running under the covers</li>
+        <li><a href="https://posthog.com/docs/libraries/node">PostHog NodeJS SDK Docs</a></li>
     </ul>
 </script>
