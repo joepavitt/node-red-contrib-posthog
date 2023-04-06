@@ -12,6 +12,6 @@ Run PostHog's `capture()` via the "Capture" node. Node-RED makes it easy to set 
 
 > Coming Soon...
 
-## People.Set
+## Group
 
 > Coming Soon...

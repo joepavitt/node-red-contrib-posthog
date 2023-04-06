@@ -1,42 +1,25 @@
 <script type="text/javascript">
-    RED.nodes.registerType('posthog-capture',{
+    RED.nodes.registerType('posthog-group',{
         category: 'posthog',
-        paletteLabel: 'Capture',
+        paletteLabel: 'Group',
         color: '#eeefe8',
         defaults: {
             name: {value: ""},
             project: { value: "", type: "posthog-project" },
+            groupType: { value: "", type: "str"},
             distinctId: { value: "" },
-            distinctIdType: { value: "none" },
-            timestamp: { value: "timestamp", required: false },
-            timestampType: { value: "msg" },
-            event: { value: "topic" },
-            eventType: { value: "msg" },
+            distinctIdType: { value: "msg" },
             properties: { value: "payload" },
             propertiesType: { value: "msg" },
-            groups: { value: "" },
-            groupsType: { value: "json" },
         },
-        inputs:1,
+        inputs: 1,
         icon: "posthog.svg",
         oneditprepare: function () {
 
             $("#node-input-distinctId").typedInput({
-                default: "none",
-                types: [{value: 'none', label: 'none', hasValue: false}, "msg", "str"],
-                typeField: "#node-input-distinctIdType"
-            });
-            
-            $("#node-input-event").typedInput({
                 default: "msg",
                 types: ["msg", "str"],
-                typeField: "#node-input-eventType"
-            });
-            
-            $("#node-input-timestamp").typedInput({
-                default: "msg",
-                types: ["msg"],
-                typeField: "#node-input-timestampType"
+                typeField: "#node-input-distinctIdType"
             });
 
             $("#node-input-properties").typedInput({
@@ -45,27 +28,21 @@
                 typeField: "#node-input-propertiesType"
             });
 
-            $("#node-input-groups").typedInput({
-                default: "none",
-                types: [{value: 'none', label: 'none', hasValue: false}, "msg", "json"],
-                typeField: "#node-input-groupsType"
-            });
-
         },
         label: function() {
-            if (this.eventType === "str" && this.event) {
-                return this.name || `capture('${this.event}')`
-            } else {
-                return this.name || "capture";
-            }
+            return this.name || `group`
         }
     });
 </script>
 
-<script type="text/html" data-template-name="posthog-capture">
+<script type="text/html" data-template-name="posthog-group">
     <div class="form-row">
         <label for="node-input-project"><i class="fa fa-tag"></i> Project</label>
         <input type="text" id="node-input-project">
+    </div>
+    <div class="form-row">
+        <label for="node-input-groupType"><i class="fa fa-tag"></i> Group Type</label>
+        <input type="text" id="node-input-groupType">
     </div>
     <div class="form-row">
         <label for="node-input-distinctId"><i class="fa fa-tag"></i> Distinct ID</label>
@@ -73,24 +50,9 @@
         <input type="hidden" id="node-input-distinctIdType">
     </div>
     <div class="form-row">
-        <label for="node-input-event"><i class="fa fa-tag"></i> Event</label>
-        <input type="text" id="node-input-event" placeholder="event">
-        <input type="hidden" id="node-input-eventType" placeholder="event">
-    </div>
-    <div class="form-row">
-        <label for="node-input-timestamp"><i class="fa fa-tag"></i> Timestamp</label>
-        <input type="text" id="node-input-timestamp">
-        <input type="hidden" id="node-input-timestampType" placeholder="timestamp">
-    </div>
-    <div class="form-row">
         <label for="node-input-properties"><i class="fa fa-tag"></i> Properties</label>
         <input type="text" id="node-input-properties" placeholder="payload">
         <input type="hidden" id="node-input-propertiesType" placeholder="payload">
-    </div>
-    <div class="form-row">
-        <label for="node-input-groups"><i class="fa fa-tag"></i> Groups</label>
-        <input type="text" id="node-input-groups" placeholder="payload">
-        <input type="hidden" id="node-input-groupsType" placeholder="payload">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -98,7 +60,7 @@
     </div>
 </script>
 
-<script type="text/html" data-help-name="posthog-capture">
+<script type="text/html" data-help-name="posthog-group">
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>project <span class="property-type">PostHog Project</span></dt>
@@ -118,6 +80,6 @@
     blank, set by <code>msg.qos</code> and <code>msg.retain</code> respectively.</p>
     <h3>References</h3>
     <ul>
-        <li><a href="https://posthog.com/docs/libraries/node#capture">PostHog NodeJS SDK Docs</a> - Details on the <code>posthog.capture</code> call running under the covers</li>
+        <li><a href="https://posthog.com/docs/libraries/node#group">PostHog NodeJS SDK Docs</a> - Details on the <code>posthog.capture</code> call running under the covers</li>
     </ul>
 </script>

@@ -7,7 +7,7 @@
 // await client.shutdownAsync()
 
 module.exports = function(RED) {
-    function PostHogCaptureNode(config) {
+    function PostHogGroupNode(config) {
         RED.nodes.createNode(this, config);
 
         const node = this;
@@ -26,28 +26,20 @@ module.exports = function(RED) {
 
         node.on('input', async function (msg, send, done) {
 
-            const evt = RED.util.evaluateNodeProperty(config.event, config.eventType, node, msg)
+            const distinctId = RED.util.evaluateNodeProperty(config.distinctId, config.distinctIdType, node, msg)
             const props = RED.util.evaluateNodeProperty(config.properties, config.propertiesType, node, msg)
-            const groups = RED.util.evaluateNodeProperty(config.groups, config.groupsType, node, msg)
-            var timestamp = RED.util.evaluateNodeProperty(config.timestamp, config.timestampType, node, msg)
 
-            if (!timestamp) {
-                timestamp = (new Date()).toISOString()
-            }
+            console.log(props)
 
-            await node.project.client.capture({
-                distinctId: 'Node-RED',
-                event: evt,
-                $lib: 'Node-RED',
-                properties: props,
-                timestamp: timestamp,
-                groups: groups
+            await node.project.client.groupIdentify({
+                groupType: config.groupType,
+                groupKey: distinctId,
+                properties: props
             })
 
             done()
-        });
-        
+        });        
     }
 
-    RED.nodes.registerType("posthog-capture", PostHogCaptureNode);
+    RED.nodes.registerType("posthog-group", PostHogGroupNode);
 }

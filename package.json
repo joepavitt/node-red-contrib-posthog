@@ -13,7 +13,9 @@
   "node-red": {
     "nodes": {
       "posthog-capture": "capture/index.js",
-      "posthog-project": "config/index.js"
+      "posthog-project": "config/index.js",
+      "posthog-identify": "identify/index.js",
+      "posthog-group": "group/index.js"
     }
   },
   "dependencies": {
