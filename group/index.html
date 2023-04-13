@@ -7,8 +7,10 @@
             name: {value: ""},
             project: { value: "", type: "posthog-project" },
             groupType: { value: "", type: "str"},
-            distinctId: { value: "" },
-            distinctIdType: { value: "msg" },
+            distinctId: { value: "Node-RED" },
+            distinctIdType: { value: "str" },
+            groupId: { value: "" },
+            groupIdType: { value: "msg" },
             properties: { value: "payload" },
             propertiesType: { value: "msg" },
         },
@@ -17,9 +19,15 @@
         oneditprepare: function () {
 
             $("#node-input-distinctId").typedInput({
-                default: "msg",
+                default: "str",
                 types: ["msg", "str"],
                 typeField: "#node-input-distinctIdType"
+            });
+
+            $("#node-input-groupId").typedInput({
+                default: "msg",
+                types: ["msg", "str"],
+                typeField: "#node-input-groupIdType"
             });
 
             $("#node-input-properties").typedInput({
@@ -41,13 +49,18 @@
         <input type="text" id="node-input-project">
     </div>
     <div class="form-row">
+        <label for="node-input-distinctId"><i class="fa fa-tag"></i> Distinct ID</label>
+        <input type="text" id="node-input-distinctId">
+        <input type="hidden" id="node-input-distinctIdType">
+    </div>
+    <div class="form-row">
         <label for="node-input-groupType"><i class="fa fa-tag"></i> Group Type</label>
         <input type="text" id="node-input-groupType">
     </div>
     <div class="form-row">
-        <label for="node-input-distinctId"><i class="fa fa-tag"></i> Distinct ID</label>
-        <input type="text" id="node-input-distinctId">
-        <input type="hidden" id="node-input-distinctIdType">
+        <label for="node-input-groupId"><i class="fa fa-tag"></i> Group ID</label>
+        <input type="text" id="node-input-groupId">
+        <input type="hidden" id="node-input-groupIdType">
     </div>
     <div class="form-row">
         <label for="node-input-properties"><i class="fa fa-tag"></i> Properties</label>
@@ -66,10 +79,13 @@
         <dt>Project <span class="property-type">PostHog Project</span></dt>
         <dd> Dropdown selection for which PostHog project you wish to send events to.
             Can be configured with a Project API key and PostHog host URL. </dd>
+        <dt>Distinct ID <span class="property-type">msg | string</span></dt>
+        <dd> Unique identifier for the Person with which to attach the
+            Group Identify event to. Recommended to keep this as a static value, e.g. "Node-RED"</dd>
         <dt>Group Type <span class="property-type">string</span></dt>
         <dd> The PostHog group type, often something like 'organization', 'team',
             or however you''ve chosen to use PostHog groups.</dd>
-        <dt>Distinct ID <span class="property-type">msg | string</span></dt>
+        <dt>Group ID <span class="property-type">msg | string</span></dt>
         <dd> Unique identifier for the group, as per PostHog's reocmmendations,
             this should not be a "name", but unique identifier that will not change.</dd>
         <dt>Properties <span class="property-type">msg | json</span></dt>
