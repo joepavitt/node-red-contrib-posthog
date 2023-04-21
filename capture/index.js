@@ -26,6 +26,7 @@ module.exports = function(RED) {
 
         node.on('input', async function (msg, send, done) {
 
+            const userid = RED.util.evaluateNodeProperty(config.distinctId, config.distinctIdType, node, msg)
             const evt = RED.util.evaluateNodeProperty(config.event, config.eventType, node, msg)
             const props = RED.util.evaluateNodeProperty(config.properties, config.propertiesType, node, msg)
             const groups = RED.util.evaluateNodeProperty(config.groups, config.groupsType, node, msg)
@@ -36,7 +37,7 @@ module.exports = function(RED) {
             }
 
             await node.project.client.capture({
-                distinctId: 'Node-RED',
+                distinctId: userid || 'Node-RED',
                 event: evt,
                 $lib: 'Node-RED',
                 properties: props,
